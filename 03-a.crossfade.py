@@ -60,6 +60,7 @@ def main():
         
         command = "ffmpeg -y -ss {} -t {}".format(idx*per_segment, per_segment)
         command += " -i {} -an".format(filename)
+        command += " -q:v 4"
         command += ' -vf "scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2"'
         command += " {}/cropped-{}.ts".format(args.processdir, basename)
         os.system(command)
