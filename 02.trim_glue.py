@@ -54,7 +54,7 @@ def main():
     # Master audio file
     [start_at, end_at] = chirp_data[master_audio_file]
     length = end_at - start_at
-    command = 'avconv -ss {} -t {}'.format(start_at, length)
+    command = 'ffmpeg -y -ss {} -t {}'.format(start_at, length)
     command += ' -i {homedir}/{master} {homedir}/trimmed-{master}'.format(homedir=args.processdir, master=master_audio_file)
     os.system(command)
     
@@ -63,23 +63,25 @@ def main():
         basename, ext = os.path.splitext(video_file)
         filename = '{}/{}'.format(args.processdir, video_file)
         length = end_at - start_at
-        command = 'ffmpeg -i {}'.format(filename)
-        command += ' -ss {} -to {}'.format(start_at, length)
+        command = 'ffmpeg -y -i {}'.format(filename)
+        command += ' -ss {} -t {}'.format(start_at, length)
         command += ' -an' # Ignore audio track
-        command += ' -c copy {}/trimmed-{}{}'.format(args.processdir, basename, ext)
+        command += ' -r 25' # re-encode 
+        command += ' {}/trimmed-{}{}'.format(args.processdir, basename, ext)
+        #command += ' -c copy {}/trimmed-{}{}'.format(args.processdir, basename, ext)
         os.system(command)
     
     
     # Add in our new sound track
     for video_file in all_video_files:
         basename, ext = os.path.splitext(video_file)
-        command = 'avconv -i {}/trimmed-{}'.format(args.processdir, video_file)
+        command = 'avconv -y -i {}/trimmed-{}'.format(args.processdir, video_file)
         command += ' -i {}/trimmed-{}'.format(args.processdir, master_audio_file)
         command += ' -shortest -c:v copy -c:a mp3 -b:a 256k'
         command += ' {}/glued-{}'.format(args.processdir, video_file)
         os.system(command)
         #avconv -i stripped-dslr.mov -i trimmed-mictrack.wav -shortest -c:v copy -c:a mp3 -b:a 256k glued-dslr.mov
-
+        
 
     # This is for the concatenation trick
     # Divide into parts

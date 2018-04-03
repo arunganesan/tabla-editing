@@ -53,7 +53,16 @@ def main():
     master_audio_file = lines[0]
     all_video_files = lines[1:]
     
-
+    # Extract audio from all video files
+    for video_file in all_video_files:
+      video_file = video_file.strip()
+      filename = '{}/{}'.format(args.processdir, video_file)
+      assert os.path.exists(filename)
+      basename = os.path.basename(filename)
+      basename, _ = os.path.splitext(basename)
+      command = 'avconv -i {homedir}/{video} -vn -ar 44100 {homedir}/{basename}.wav'.format(homedir=args.processdir, video=video_file, basename=basename)
+      os.system(command)
+    
     UPFS, up = read_and_normalize_audio(UPCHIRP)
     DOWNFS, down = read_and_normalize_audio(DOWNCHIRP)
     assert UPFS == DOWNFS
@@ -61,7 +70,7 @@ def main():
     audio_data = {}
     master_audio_file = master_audio_file.strip()
     results = []
-
+    
     #for audio_file in audio_files:
     for video_file in tqdm(all_video_files + [master_audio_file]):
         video_file = video_file.strip()
