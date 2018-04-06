@@ -92,7 +92,7 @@ def main():
         
         
         basename = os.path.basename(audio_file)
-        plot_figure(upxcorr, downxcorr, audio_file)
+        #plot_figure(upxcorr, downxcorr, audio_file)
         results.append([video_file, start_time, end_time, duration])
     
     ofile = open('{}/{}'.format(args.processdir, OFILE), 'w')
