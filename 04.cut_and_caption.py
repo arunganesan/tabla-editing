@@ -12,7 +12,7 @@ TEXT = [
     [3, 14, 'Dha Na Tet, Na Dha Tet'],
     [14, 24, 'Dha Dhin Na, Ta Dhin Na'],
     [24, 35, 'Dha Ge Tin, Na Tin -\nNa Ge Tin, Na Tin -'],
-    [35, 60, 'Ektal\nDhin, Dhin, Dhage \nTRKT, TuNa, KatTa\nDhage, TRKT, Dhin, Nana']
+    [35, 60, 'Ektal\n\nDhin, Dhin, Dhage \nTRKT, Tu, Na, Kat, Ta\nDhage, TRKT, Dhin, Nana']
 ]
 
 
@@ -28,13 +28,16 @@ os.system(command)
 command = 'convert -size 960x540 xc:black {}/black.png'.format(DIR)
 os.system(command)
 
+FONT = 'Gentium-Basic-Regular'
+
 for idx, (start, end, text) in enumerate(TEXT):
     # Make image
 
-    command = 'convert -font helvetica -fill white -pointsize 60 -gravity center -draw "text 0,0 '
+    command = 'convert -font {} -fill white -pointsize 60 -gravity center -draw "text 0,0 '.format(FONT)
     command += "'{}'".format(text)
     command += '" {}/black.png {}/{}.png'.format(DIR, DIR, idx)
     os.system(command)
+
 
 command = 'ffmpeg -y -i {}'.format(OFILE)
 for idx in range(len(TEXT)):

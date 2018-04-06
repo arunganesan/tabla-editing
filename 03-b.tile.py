@@ -60,7 +60,12 @@ def main():
         command = "ffmpeg -y "
         command += " -i {} -an".format(filename)
         command += " -q:v 4"
-        command += ' -vf "scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2"'
+
+        # This scales and pads
+        #command += ' -vf "scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2"'
+        
+        # This scales and crops
+        command += ' -vf "scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720:(ow-iw)/2:(oh-ih)/2"'
         command += " {}/cropped-{}.ts".format(args.processdir, basename)
         os.system(command)
     
