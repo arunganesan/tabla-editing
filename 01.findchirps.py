@@ -84,10 +84,11 @@ def main():
         if len(data.shape) > 1:
             data = data[:,0]
         upxcorr = sps.fftconvolve(data, up[::-1], mode='full')
-        downxcorr = sps.fftconvolve(data, down[::-1], mode='full')
         start_time = np.argmax(upxcorr)  / float(FS)
         ATLEAST = 0 #int((67 + start_time)*FS)
+        downxcorr = sps.fftconvolve(data, down[::-1], mode='full')
         end_time = (ATLEAST + np.argmax(downxcorr[ATLEAST:])) / float(FS)
+        #end_time = float(len(downxcorr))/float(FS)
         duration = end_time - start_time
         
         
