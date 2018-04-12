@@ -23,6 +23,7 @@ def main():
     import numpy as np
     import scipy.signal as sps
     from tqdm import tqdm
+    import json
     import os
 
 
@@ -30,7 +31,6 @@ def main():
     parser.add_argument('processdir')
     args = parser.parse_args()
     
-    import os
     specfile = '{}/spec'.format(args.processdir)
     assert os.path.exists(specfile)
     lines = open(specfile).readlines()
@@ -40,31 +40,22 @@ def main():
     
     chirpfile = '{}/chirps'.format(args.processdir)
     assert os.path.exists(chirpfile)
-    chirp_lines = open(chirpfile).readlines()
-    chirp_data = {}
-    for line in chirp_lines:
-        parts = line.split(' ')
-        video_file = parts[0]
-        start_at = float(parts[1])
-        end_at = float(parts[2])
-        chirp_data[video_file] = [start_at, end_at]
-
+    chirp_data = json.loads(open(chirpfile).read())
+    
     # Trim files
     import subprocess
     # Master audio file
-    [start_at, end_at] = chirp_data[master_audio_file]
-    length = end_at - start_at
-    command = 'ffmpeg -y -ss {} -t {}'.format(start_at, length)
+    start_at = chirp_data[master_audio_file]
+    command = 'ffmpeg -ss {}'.format(start_at)
     command += ' -i {homedir}/{master} {homedir}/trimmed-{master}'.format(homedir=args.processdir, master=master_audio_file)
     os.system(command)
     
     for video_file in all_video_files:
-        [start_at, end_at] = chirp_data[video_file]
+        start_at = chirp_data[video_file]
         basename, ext = os.path.splitext(video_file)
         filename = '{}/{}'.format(args.processdir, video_file)
-        length = end_at - start_at
-        command = 'ffmpeg -y -i {}'.format(filename)
-        command += ' -ss {} -t {}'.format(start_at, length)
+        command = 'ffmpeg -i {}'.format(filename)
+        command += ' -ss {}'.format(start_at)
         command += ' -an' # Ignore audio track
         command += ' -r 25' # re-encode 
         command += ' {}/trimmed-{}{}'.format(args.processdir, basename, ext)
@@ -75,28 +66,11 @@ def main():
     # Add in our new sound track
     for video_file in all_video_files:
         basename, ext = os.path.splitext(video_file)
-        command = 'avconv -y -i {}/trimmed-{}'.format(args.processdir, video_file)
+        command = 'ffmpeg -i {}/trimmed-{}'.format(args.processdir, video_file)
         command += ' -i {}/trimmed-{}'.format(args.processdir, master_audio_file)
         command += ' -shortest -c:v copy -c:a mp3 -b:a 256k'
         command += ' {}/glued-{}'.format(args.processdir, video_file)
         os.system(command)
         #avconv -i stripped-dslr.mov -i trimmed-mictrack.wav -shortest -c:v copy -c:a mp3 -b:a 256k glued-dslr.mov
-        
 
-    # This is for the concatenation trick
-    # Divide into parts
-    #length = chirp_data[master_audio_file][1] - chirp_data[master_audio_file][0]
-    #per_segment = length / float(len(all_video_files))
-    #for idx in range(len(all_video_files)):
-    #    command = "avconv -ss {} -t {}".format(idx*per_segment, per_segment)
-    #    command += " -i {homedir}/trimmed-{basename}.ts {homedir}/cropped-{basename}.ts".format(homedir=args.processdir, basename=all_video_files[idx])
-    #    print command
-    #    os.system(command)
-    #
-    ## Concat them together
-    #command = 'avconv -i concat:"'
-    #command += '|'.join(['{}/cropped-{}.ts'.format(args.processdir, basename) for basename in all_video_files])
-    #command += '" -c copy -bsf:a aac_adtstoasc -y final.mp4'
-    #os.system(command) 
-    
 main()

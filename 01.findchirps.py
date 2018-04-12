@@ -33,17 +33,15 @@ def read_and_normalize_audio (audiofile):
 
 def main():
     import argparse
-    import numpy as np
     import scipy.signal as sps
     from tqdm import tqdm
     import os
-
+    import json
 
     parser = argparse.ArgumentParser()
     parser.add_argument('processdir')
     args = parser.parse_args()
     
-    import os
     specfile = '{}/spec'.format(args.processdir)
     assert os.path.exists(specfile)
     
@@ -60,7 +58,7 @@ def main():
       assert os.path.exists(filename)
       basename = os.path.basename(filename)
       basename, _ = os.path.splitext(basename)
-      command = 'avconv -i {homedir}/{video} -vn -ar 44100 {homedir}/{basename}.wav'.format(homedir=args.processdir, video=video_file, basename=basename)
+      command = 'ffmpeg -y -i {homedir}/{video} -vn -ar 44100 {homedir}/{basename}.wav'.format(homedir=args.processdir, video=video_file, basename=basename)
       os.system(command)
     
     UPFS, up = read_and_normalize_audio(UPCHIRP)
@@ -69,7 +67,7 @@ def main():
 
     audio_data = {}
     master_audio_file = master_audio_file.strip()
-    results = []
+    results = {}
     
     #for audio_file in audio_files:
     for video_file in tqdm(all_video_files + [master_audio_file]):
@@ -85,20 +83,12 @@ def main():
             data = data[:,0]
         upxcorr = sps.fftconvolve(data, up[::-1], mode='full')
         start_time = np.argmax(upxcorr)  / float(FS)
-        ATLEAST = 0 #int((67 + start_time)*FS)
-        downxcorr = sps.fftconvolve(data, down[::-1], mode='full')
-        end_time = (ATLEAST + np.argmax(downxcorr[ATLEAST:])) / float(FS)
-        #end_time = float(len(downxcorr))/float(FS)
-        duration = end_time - start_time
-        
-        
         basename = os.path.basename(audio_file)
         #plot_figure(upxcorr, downxcorr, audio_file)
-        results.append([video_file, start_time, end_time, duration])
+        results[video_file] = start_time
     
     ofile = open('{}/{}'.format(args.processdir, OFILE), 'w')
-    for result in results:
-        ofile.write(' '.join(map(str, result)) +  '\n')
+    ofile.write(json.dumps(results, indent=4, sort_keys=True))
     ofile.close()
      
 

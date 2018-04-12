@@ -7,8 +7,8 @@ Finally, strip the audio channel of the glued together file and replace with the
 """
 
 OFILE = 'chirps'
-WIDTH = 1920
-HEIGHT = 1080
+WIDTH = 2100 #1920
+HEIGHT =  1000 #1080
 
 import numpy as np
 
@@ -48,7 +48,7 @@ def main():
         basename, ext = os.path.splitext(video_file)
         filename = '{}/trimmed-{}'.format(args.processdir, video_file)
         
-        command = "ffmpeg"
+        command = "ffmpeg -y"
         command += " -i {} -an".format(filename)
         command += " -q:v 4"
 
@@ -62,7 +62,7 @@ def main():
     
     # Mosaic
     # https://trac.ffmpeg.org/wiki/Create%20a%20mosaic%20out%20of%20several%20input%20videos
-    command = "ffmpeg"
+    command = "ffmpeg -y"
     for video_file in all_video_files:
         basename, ext = os.path.splitext(video_file)
         filename = "{}/cropped-{}.ts".format(args.processdir, basename)
@@ -72,16 +72,14 @@ def main():
     command += ' -filter_complex "'
     command += " nullsrc=size={}x{} [base];".format(WIDTH, HEIGHT)
     command += ' [0:v] setpts=PTS-STARTPTS, scale={}x{} [upperleft];'.format(WIDTH/2, HEIGHT/2)
-    command += ' [1:v] setpts=PTS-STARTPTS, scale={}x{} [upperright];'.format(WIDTH/2, HEIGHT/2)
-    command += ' [2:v] setpts=PTS-STARTPTS, scale={}x{} [lowerleft];'.format(WIDTH/2, HEIGHT/2)
+    command += ' [1:v] setpts=PTS-STARTPTS, scale={}x{} [lowerleft];'.format(WIDTH/2, HEIGHT/2)
     command += ' [base][upperleft] overlay=shortest=1 [tmp1];'
-    command += ' [tmp1][upperright] overlay=shortest=1:x={} [tmp2]; '.format(WIDTH/2)
-    command += ' [tmp2][lowerleft] overlay=shortest=1:y={}'.format(HEIGHT/2)
+    command += ' [tmp1][lowerleft] overlay=shortest=1:y={}'.format(HEIGHT/2)
     command += ' "'
     command += ' -c:v libx264 {}/{}'.format(args.processdir, OFILE)
     os.system(command)
     
-    command = 'ffmpeg -i {}/{}'.format(args.processdir, OFILE)
+    command = 'ffmpeg -y -i {}/{}'.format(args.processdir, OFILE)
     command += ' -i {}/trimmed-{}'.format(args.processdir, master_audio_file)
     command += ' -shortest -c:v copy -c:a mp3 -b:a 256k'
     command += ' {}/glued-{}'.format(args.processdir, OFILE)

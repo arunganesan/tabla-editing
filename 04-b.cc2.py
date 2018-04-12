@@ -3,8 +3,8 @@ import os
 import json
 import argparse
 
-WIDTH = 1920.0
-HEIGHT = 1080.0
+WIDTH = 2100 #1920.0
+HEIGHT = 1000 #1080.0
 
 parser = argparse.ArgumentParser()
 parser.add_argument('processdir')
@@ -18,7 +18,7 @@ DURATION = spec['duration']
 TEXT = spec['text']
 for idx in range(len(TEXT)):
     TEXT[idx][0] -= FROM_TIME
-spect.setdefault('audioDelay', 0)
+spec.setdefault('audioDelay', 0)
 AUDIO_DELAY = spec['audioDelay']
 
 # Crop into the manually chosen video
@@ -28,7 +28,7 @@ command = 'ffmpeg -y -i {ifile} -itsoffset {} -i {ifile} -map 0:v -map 1:a -ss {
 os.system(command)
 
 # Make black
-command = 'convert -size {}x{} xc:black {}/black.png'.format(WIDTH/2, HEIGHT/2, DIR)
+command = 'convert -size {}x{} xc:black {}/black.png'.format(WIDTH/2, HEIGHT, DIR)
 os.system(command)
 
 # Make each text slide
@@ -51,7 +51,7 @@ for idx, (start, text) in enumerate(TEXT):
     if idx < len(TEXT)-1:
         end = TEXT[idx+1][0]
 
-    command += "{}[{}:v] overlay={}:{}:".format(last_filter_out, idx+1, WIDTH/2, HEIGHT/2)
+    command += "{}[{}:v] overlay={}:{}:".format(last_filter_out, idx+1, WIDTH/2, 0)
     command += "enable='between(t,{},{})'".format(start, end)
     last_filter_out = '[l{}]'.format(idx)
     if idx < len(TEXT)-1:
