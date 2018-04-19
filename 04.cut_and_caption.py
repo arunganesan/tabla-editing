@@ -3,8 +3,8 @@ import os
 import json
 import argparse
 
-WIDTH = 1920.0
-HEIGHT = 1080.0
+WIDTH = 2100; #1920.0
+HEIGHT = 1000#1080.0
 
 parser = argparse.ArgumentParser()
 parser.add_argument('processdir')
@@ -18,7 +18,7 @@ DURATION = spec['duration']
 TEXT = spec['text']
 for idx in range(len(TEXT)):
     TEXT[idx][0] -= FROM_TIME
-spect.setdefault('audioDelay', 0)
+spec.setdefault('audioDelay', 0)
 AUDIO_DELAY = spec['audioDelay']
 
 # Crop into the manually chosen video
