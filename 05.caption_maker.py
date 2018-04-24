@@ -1,0 +1,57 @@
+#! /usr/bin/env python
+import os
+import json
+import argparse
+
+WIDTH = 1000; #1920.0
+HEIGHT = 1000##1080.0
+
+parser = argparse.ArgumentParser()
+parser.add_argument('processdir')
+args = parser.parse_args()
+
+DIR = args.processdir
+assert os.path.exists('{}/manual'.format(DIR))
+spec = json.loads(open('{}/manual'.format(DIR)).read())
+FROM_TIME = spec['start']
+DURATION = spec['duration']
+TEXT = spec['text']
+for idx in range(len(TEXT)):
+    TEXT[idx][0] -= FROM_TIME
+
+# Make blank video of duration 
+BLANK_FILE = '{}/empty.mp4'.format(DIR)
+command = "ffmpeg -y -t {duration} -s {w}x{h} -f rawvideo -pix_fmt rgb24 -r 25 -i /dev/zero {ofile}".format(duration=DURATION, w=WIDTH, h=HEIGHT, ofile=BLANK_FILE)
+os.system(command)
+
+# Make black
+command = 'convert -size {}x{} xc:black {}/black.png'.format(WIDTH/2, HEIGHT/2, DIR)
+os.system(command)
+
+# Make each text slide
+FONT = 'Gentium-Basic-Regular'
+for idx, (start, text) in enumerate(TEXT):
+    command = 'convert -font {} -fill white -pointsize 60 -gravity center -draw "text 0,0 '.format(FONT)
+    command += "'{}'".format(text)
+    command += '" {}/black.png {}/{}.png'.format(DIR, DIR, idx)
+    os.system(command)
+
+# Add all text images to the video
+command = 'ffmpeg -y -i {}'.format(BLANK_FILE)
+for idx in range(len(TEXT)):
+    command += ' -i {}/{}.png'.format(DIR, idx)
+
+command += ' -filter_complex "'
+last_filter_out = '[0:v]'
+for idx, (start, text) in enumerate(TEXT):
+    end = DURATION
+    if idx < len(TEXT)-1:
+        end = TEXT[idx+1][0]
+
+    command += "{}[{}:v] overlay={}:{}:".format(last_filter_out, idx+1, WIDTH, HEIGHT)
+    command += "enable='between(t,{},{})'".format(start, end)
+    last_filter_out = '[l{}]'.format(idx)
+    if idx < len(TEXT)-1:
+        command += last_filter_out + ';'
+command += '" -pix_fmt yuv420p -c:a copy {}/caption.mp4'.format(DIR)
+os.system(command)

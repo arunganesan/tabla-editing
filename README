@@ -1,0 +1,20 @@
+# Normal pipeline
+./01.findchirps 
+./02.trim
+./03-e.multitile.py
+./04.manual-crop.py < manual
+
+# Pipeline wishlist
+./01.findchirps
+./02.trim_and_glue_and_freeze (automatically freezes to the length of master wav -- skip last 0.5 seconds of video)
+./05.make_caption < with gridspec
+./04-e.multitile < with grid spec on each video (including caption video)
+./05.manual_crop.py < crop and final touches
+
+# Looping pipeline
+./01.findchirps
+./02.trim_and_glue (NOT freeze frame)
+./03.loop_only_audio < loop spec (includes bar structure)
+./04.loop_audio_and_video < loop spec
+./05.multitile < grid spec
+This doesnt need manual cropping because we already have the bar structure in loop spec

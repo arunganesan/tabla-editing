@@ -41,17 +41,24 @@ def main():
     master_audio_file = lines[0].strip()
     all_video_files = [l.strip() for l in lines[1:]]
     
+    import math
+    GRID = int(math.ceil(math.sqrt(len(all_video_files))))
+    cell_width = WIDTH/GRID
+    cell_height = HEIGHT/GRID
+
+
     # Split files
     for idx, video_file in enumerate(all_video_files):
         basename, ext = os.path.splitext(video_file)
-        filename = '{}/trimmed-{}'.format(args.processdir, video_file)
+        #filename = '{}/trimmed-{}'.format(args.processdir, video_file)
+        filename = '{}/glued-{}'.format(args.processdir, video_file)
         
         command = "ffmpeg"
         command += " -i {} -an".format(filename)
         command += " -q:v 4"
 
         # This scales and crops
-        command += ' -vf "scale={width}:{height}:force_original_aspect_ratio=increase,crop={width}:{height}:(ow-iw)/2:(oh-ih)/2"'.format(width=WIDTH/2, height=HEIGHT/2)
+        command += ' -vf "scale={width}:{height}:force_original_aspect_ratio=increase,crop={width}:{height}:(ow-iw)/2:(oh-ih)/2"'.format(width=cell_width, height=cell_height)
         command += " {}/cropped-{}.ts".format(args.processdir, basename)
         os.system(command)
     
@@ -66,11 +73,6 @@ def main():
     OFILE = 'mosaic.mp4'
     command += ' -filter_complex "'
     command += " nullsrc=size={}x{} [base];".format(WIDTH, HEIGHT)
-
-    import math
-    GRID = int(math.ceil(math.sqrt(len(all_video_files))))
-    cell_width = WIDTH/GRID
-    cell_height = HEIGHT/GRID
 
     for idx in range(len(all_video_files)):
         command += ' [{idx}:v] setpts=PTS-STARTPTS, scale={w}x{h} [video-{idx}];'.format(idx=idx, w=cell_width, h=cell_height)
@@ -109,6 +111,7 @@ def main():
     # Glue audio file
     command = 'ffmpeg -y -i {}/{}'.format(args.processdir, OFILE)
     command += ' -i {}/trimmed-{}'.format(args.processdir, master_audio_file)
+    #command += ' -shortest -c:v copy -c:a mp3 -b:a 256k'
     command += ' -shortest -c:v copy -c:a mp3 -b:a 256k'
     command += ' {}/glued-{}'.format(args.processdir, OFILE)
     os.system(command)
