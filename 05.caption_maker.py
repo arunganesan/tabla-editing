@@ -2,22 +2,35 @@
 import os
 import json
 import argparse
+from readgrid import read_spec
 
-WIDTH = 1000; #1920.0
-HEIGHT = 1000##1080.0
 
 parser = argparse.ArgumentParser()
 parser.add_argument('processdir')
 args = parser.parse_args()
-
 DIR = args.processdir
-assert os.path.exists('{}/manual'.format(DIR))
-spec = json.loads(open('{}/manual'.format(DIR)).read())
+
+WIDTH = 1000; #1920.0
+HEIGHT = 1000##1080.0
+
+
+if os.path.exists('{}/gridspec.json'.format(DIR)):
+    grid = read_spec('{}/gridspec.json'.format(DIR))
+    if 'caption.mp4' in grid:
+        spec = grid['caption.mp4']
+        WIDTH = spec['width']
+        HEIGHT = spec['height']
+
+assert os.path.exists('{}/caption.json'.format(DIR))
+spec = json.loads(open('{}/caption.json'.format(DIR)).read())
 FROM_TIME = spec['start']
 DURATION = spec['duration']
 TEXT = spec['text']
 for idx in range(len(TEXT)):
     TEXT[idx][0] -= FROM_TIME
+
+
+
 
 # Make blank video of duration 
 BLANK_FILE = '{}/empty.mp4'.format(DIR)
@@ -25,7 +38,7 @@ command = "ffmpeg -y -t {duration} -s {w}x{h} -f rawvideo -pix_fmt rgb24 -r 25 -
 os.system(command)
 
 # Make black
-command = 'convert -size {}x{} xc:black {}/black.png'.format(WIDTH/2, HEIGHT/2, DIR)
+command = 'convert -size {}x{} xc:black {}/black.png'.format(WIDTH, HEIGHT, DIR)
 os.system(command)
 
 # Make each text slide
@@ -48,7 +61,7 @@ for idx, (start, text) in enumerate(TEXT):
     if idx < len(TEXT)-1:
         end = TEXT[idx+1][0]
 
-    command += "{}[{}:v] overlay={}:{}:".format(last_filter_out, idx+1, WIDTH, HEIGHT)
+    command += "{}[{}:v] overlay=0:0:".format(last_filter_out, idx+1)
     command += "enable='between(t,{},{})'".format(start, end)
     last_filter_out = '[l{}]'.format(idx)
     if idx < len(TEXT)-1:

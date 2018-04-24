@@ -18,7 +18,6 @@ import numpy as np
 """
 
 UPCHIRP = 'up-long.wav'
-DOWNCHIRP = 'down-long.wav'
 OFILE = 'chirps'
 
 import numpy as np
@@ -62,8 +61,6 @@ def main():
       os.system(command)
     
     UPFS, up = read_and_normalize_audio(UPCHIRP)
-    DOWNFS, down = read_and_normalize_audio(DOWNCHIRP)
-    assert UPFS == DOWNFS
 
     audio_data = {}
     master_audio_file = master_audio_file.strip()

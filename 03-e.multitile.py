@@ -8,19 +8,10 @@ Then glue on audio track.
 """
 
 OFILE = 'chirps'
-WIDTH = 2100# 1920
-HEIGHT = 1000 #1080
+WIDTH = 500# 1920
+HEIGHT = 500 #1080
 
 import numpy as np
-
-def read_and_normalize_audio (audiofile):
-  from scipy.io import wavfile
-  rate, signal = wavfile.read(audiofile)
-  converted = np.array(signal, dtype=np.float64)
-  normalized = converted / np.amax(converted)
-  return rate, normalized 
-
-
 
 def main():
     import argparse
@@ -47,19 +38,16 @@ def main():
     cell_height = HEIGHT/GRID
 
 
-    # Split files
+    # Just convert to TS file
     for idx, video_file in enumerate(all_video_files):
         basename, ext = os.path.splitext(video_file)
-        #filename = '{}/trimmed-{}'.format(args.processdir, video_file)
-        filename = '{}/glued-{}'.format(args.processdir, video_file)
         
         command = "ffmpeg"
-        command += " -i {} -an".format(filename)
+        command += " -i {}/{} -an".format(args.processdir, video_file)
         command += " -q:v 4"
 
         # This scales and crops
-        command += ' -vf "scale={width}:{height}:force_original_aspect_ratio=increase,crop={width}:{height}:(ow-iw)/2:(oh-ih)/2"'.format(width=cell_width, height=cell_height)
-        command += " {}/cropped-{}.ts".format(args.processdir, basename)
+        command += " {}/{}.ts".format(args.processdir, basename)
         os.system(command)
     
     # Mosaic
@@ -67,7 +55,7 @@ def main():
     command = "ffmpeg"
     for video_file in all_video_files:
         basename, ext = os.path.splitext(video_file)
-        filename = "{}/cropped-{}.ts".format(args.processdir, basename)
+        filename = "{}/{}.ts".format(args.processdir, basename)
         command += " -i {} -an".format(filename)
     
     OFILE = 'mosaic.mp4'
@@ -75,7 +63,7 @@ def main():
     command += " nullsrc=size={}x{} [base];".format(WIDTH, HEIGHT)
 
     for idx in range(len(all_video_files)):
-        command += ' [{idx}:v] setpts=PTS-STARTPTS, scale={w}x{h} [video-{idx}];'.format(idx=idx, w=cell_width, h=cell_height)
+        command += ' [{idx}:v] setpts=PTS-STARTPTS, scale={w}:{h}:force_original_aspect_ratio=increase, crop={w}:{h}:(ow-iw)/2:(oh-ih)/2 [video-{idx}];'.format(idx=idx, w=cell_width, h=cell_height)
     
     counter = 0
     for row in range(GRID):
