@@ -21,6 +21,10 @@ if os.path.exists('{}/gridspec.json'.format(DIR)):
         WIDTH = spec['width']
         HEIGHT = spec['height']
 
+if WIDTH % 2 != 0: WIDTH += 1
+if HEIGHT % 2 != 0: HEIGHT += 1
+
+
 assert os.path.exists('{}/caption.json'.format(DIR))
 spec = json.loads(open('{}/caption.json'.format(DIR)).read())
 FROM_TIME = spec['start']
@@ -44,7 +48,7 @@ os.system(command)
 # Make each text slide
 FONT = 'Gentium-Basic-Regular'
 for idx, (start, text) in enumerate(TEXT):
-    command = 'convert -font {} -fill white -pointsize 60 -gravity center -draw "text 0,0 '.format(FONT)
+    command = 'convert -font {} -fill white -pointsize 40 -gravity center -draw "text 0,0 '.format(FONT)
     command += "'{}'".format(text)
     command += '" {}/black.png {}/{}.png'.format(DIR, DIR, idx)
     os.system(command)
@@ -67,4 +71,5 @@ for idx, (start, text) in enumerate(TEXT):
     if idx < len(TEXT)-1:
         command += last_filter_out + ';'
 command += '" -pix_fmt yuv420p -c:a copy {}/caption.mp4'.format(DIR)
+print command
 os.system(command)
