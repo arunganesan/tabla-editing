@@ -7,4 +7,4 @@ echo ./crop_to_right_length.py $1
 echo ./multitile.py $1
 ./multitile.py $1
 echo ffmpeg -i glued-mosaic.mp4 -c:v libx264 -strict -2 -c:a aac -ar 44100 -r 30 -pix_fmt yuv420p -shortest 
-ffmpeg -i $1/glued-mosaic.mp4 -c:v libx264 -strict -2 -c:a aac -ar 44100 -r 30 -pix_fmt yuv420p -shortest $1/final.mp4
+ffmpeg -y -i $1/glued-mosaic.mp4 -c:v libx264 -strict -2 -c:a aac -ar 44100 -r 30 -pix_fmt yuv420p -shortest $1/final.mp4
