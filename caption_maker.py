@@ -47,8 +47,9 @@ os.system(command)
 
 # Make each text slide
 FONT = 'Gentium-Basic-Regular'
+POINT_SIZE = WIDTH / 14.0
 for idx, (start, text) in enumerate(TEXT):
-    command = 'convert -font {} -fill white -pointsize 50 -gravity center -draw "text 0,0 '.format(FONT)
+    command = 'convert -font {} -fill white -pointsize {} -gravity center -draw "text 0,0 '.format(FONT, POINT_SIZE)
     command += "'{}'".format(text)
     command += '" {}/black.png {}/{}.png'.format(DIR, DIR, idx)
     os.system(command)

@@ -5,44 +5,82 @@ def join_with_newline(bars):
     PERLINE = 4
     for idx in range(0, len(bars), PERLINE):
         chunks.append(bars[idx:idx+PERLINE])
-    line = '\\n'.join([', '.join(bars) for bars in chunks])
+    line = '\n'.join([', '.join(bars) for bars in chunks])
     return line
 
 
 
-def play_all_this(timer, THEME):
+def play_all_this(timer, THEME, SECOND_PER_BAR):
+    play_lines = []
     for idx in range(len(THEME)):
         joined = join_with_newline(THEME[:idx+1])
-        print '\t[{}, "{}"],'.format(timer, joined)
+        play_lines.append([timer, joined])
         timer += SECOND_PER_BAR
-    return timer
+    return play_lines, timer
 
 
 def sample(theme, indices):
-    return [theme[i] for i in indices]
+    return [theme[i-1] for i in indices]
+
+
+IFILE = 'arrangement.json'
+OFILE = 'caption.json'
+
+def main():
+    import argparse
+    import json, os
     
-# HARDCODING FOR NOW
-BPM = 140
-START_AT = 57
-THEME = "Dha-TR KTGeRe DeReDeRe KTTK Dha-TR KTTK Tu-Na- KTTK".split()
-KHALI = "Ta-TR KTKeRe TeReTeRe KTTK Ta-TR KTTK Dhin-Na- GeReNaGe".split()
-VARIATION_1 = sample(THEME, range(4) + range(4) + range(8))
-VARIATION_1 += sample(KHALI, range(4) + range(4)) + sample(THEME, range(8))
-VARIATION_2 = sample(THEME, range(3) + range(3) + range(2) + range(8))
-VARIATION_2 += sample(KHALI, range(3) + range(3) + range(2)) + sample(THEME, range(8))
+    #parser = argparse.ArgumentParser()
+    #parser.add_argument('processdir')
+    #args = parser.parse_args()
+    
+    
 
-# First group
-SECOND_PER_BAR = 60.0/1 * 1/140.0
-timer = 3 + START_AT
-timer = play_all_this(timer, THEME)
-timer = play_all_this(timer, KHALI)
-timer = play_all_this(timer, THEME)
-timer = play_all_this(timer, KHALI)
+    caption_json = {}
+    arrangement = json.load(open(IFILE))
+    
+    caption_json['start'] = arrangement['start']
+    caption_json['duration'] = 60
+    caption_json['audioDelay'] = 0
 
+    library_ifile = arrangement['library']
+    assert os.path.exists(library_ifile)
+    library = json.load(open(library_ifile))
+    THEME = library['theme'].split()
+    KHALI = library['khali'].split()
+    
+    variations = []
+    for variation in library['variations']:
+        expanded_variation = []
+        for row in variation:
+            if row[0] == 'theme':
+                source = THEME
+            else:
+                source = KHALI
+            
+            expanded_variation += sample(source, row[1:])
+        variations.append(expanded_variation)
+    
+    text = []
+    BPM = arrangement['bpm']
+    SECOND_PER_BAR = 60.0 / BPM
+    timer = 0
+    for piece in arrangement['arrangement']:
+        if piece['time'] != -1:
+            timer = piece['time']
+        
+        if piece['part'] == 'theme':
+            notes = THEME
+        elif piece['part'] == 'khali':
+            notes = KHALI
+        elif piece['part'] == 'variation':
+            notes = variations[piece['idx']-1]
 
-timer = 22.5 + 0.8 + START_AT
-timer = play_all_this(timer, VARIATION_1)
+        lines, timer = play_all_this(timer, notes, SECOND_PER_BAR)
+        text += lines
+    caption_json['text'] = text
 
-
-timer = 40.4 + START_AT
-timer = play_all_this(timer, VARIATION_2)
+    ofile = open(OFILE, 'w')
+    json.dump(caption_json, ofile, indent=4)
+    ofile.close()
+main()
