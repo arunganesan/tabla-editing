@@ -1,13 +1,14 @@
 {
-  "library": "DeTeTe.json",
+  "library": "DhaTRKTTKDRDR.json",
   "bpm": 140,
-  "start": 144,
+  "start": 5.5,
   "arrangement": [
-    { "time": 145.6, "part": "theme" },
+    { "time": 6, "part": "theme" },
     { "time": -1, "part": "khali" },
     { "time": -1, "part": "theme" },
     { "time": -1, "part": "khali" },
-    { "time": 162.5, "part": "variation", "idx": 2 },
-    { "time": 179.75, "part": "variation", "idx": 3 }
+    { "time": -1, "part": "variation", "idx": 2},
+    { "time": -1, "part": "variation", "idx": 3},
+    { "time": -1, "part": "variation", "idx": 4}
   ]
 }

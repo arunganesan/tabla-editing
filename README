@@ -1,20 +1,10 @@
-# Normal pipeline
-./01.findchirps 
-./02.trim
-./03-e.multitile.py
-./04.manual-crop.py < manual
+# Different workflows
+We can do three kinds of things with these scripts.
+1. Recording with caption
+2. Multi-layered recording
+3. Looped recording (this is mostly a work in progress)
 
-# Pipeline wishlist
-./01.findchirps
-./02.trim_and_glue_and_freeze (automatically freezes to the length of master wav -- skip last 0.5 seconds of video)
-./05.make_caption < with gridspec
-./04-e.multitile < with grid spec on each video (including caption video)
-./05.manual_crop.py < crop and final touches
-
-# Looping pipeline
-./01.findchirps
-./02.trim_and_glue (NOT freeze frame)
-./03.loop_only_audio < loop spec (includes bar structure)
-./04.loop_audio_and_video < loop spec
-./05.multitile < grid spec
-This doesnt need manual cropping because we already have the bar structure in loop spec
+Generally, for step 1 we have to do:
+1. `./STEP-1.sh`
+2. Edit caption.json and gridspec.json (optionally use `make_caption_spec.py` to make caption.json) 
+3. `./STEP-2.sh`

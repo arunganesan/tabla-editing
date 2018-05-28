@@ -23,6 +23,7 @@ for idx in range(len(TEXT)):
 
 from glob import glob
 trimmed_files = glob('{}/trimmed-*mov'.format(DIR))
+trimmed_files += glob('{}/trimmed-*MOV'.format(DIR))
 for f in trimmed_files:
     savename = f.replace('trimmed-', 'cropped-')
     command = 'ffmpeg -y -i {} -ss {} -t {} {}'.format(f, FROM_TIME, DURATION, savename)

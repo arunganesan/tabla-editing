@@ -44,6 +44,7 @@ def main():
     caption_json['audioDelay'] = 0
 
     library_ifile = arrangement['library']
+    library_ifile = 'library/' + library_ifile
     assert os.path.exists(library_ifile)
     library = json.load(open(library_ifile))
     THEME = library['theme'].split()
@@ -53,12 +54,17 @@ def main():
     for variation in library['variations']:
         expanded_variation = []
         for row in variation:
-            if row[0] == 'theme':
-                source = THEME
+            sample_from = row[0]
+            if sample_from == 'raw':
+                expanded_variation += row[1:]
             else:
-                source = KHALI
-            
-            expanded_variation += sample(source, row[1:])
+                if sample_from == 'theme':
+                    source = THEME
+                elif sample_from == 'khali':
+                    source = KHALI
+                expanded_variation += sample(source, row[1:])
+            #variations.append(sample(source, row[1:]))
+        
         variations.append(expanded_variation)
     
     text = []
@@ -69,15 +75,26 @@ def main():
         if piece['time'] != -1:
             timer = piece['time']
         
-        if piece['part'] == 'theme':
-            notes = THEME
-        elif piece['part'] == 'khali':
-            notes = KHALI
-        elif piece['part'] == 'variation':
-            notes = variations[piece['idx']-1]
 
-        lines, timer = play_all_this(timer, notes, SECOND_PER_BAR)
-        text += lines
+        if piece['part'] == 'variation':
+            notes = variations[piece['idx']-1]
+            part1 = notes[:len(notes)/2]
+            part2 = notes[len(notes)/2:]
+            
+            print part1, part2
+            lines, timer = play_all_this(timer, part1, SECOND_PER_BAR)
+            text += lines
+
+            lines, timer = play_all_this(timer, part2, SECOND_PER_BAR)
+            text += lines
+        else:
+            if piece['part'] == 'theme':
+                notes = THEME
+            elif piece['part'] == 'khali':
+                notes = KHALI
+        
+            lines, timer = play_all_this(timer, notes, SECOND_PER_BAR)
+            text += lines
     caption_json['text'] = text
 
     ofile = open(OFILE, 'w')

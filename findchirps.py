@@ -44,6 +44,7 @@ def main():
     
     master_audio_file = 'master.wav'
     all_video_files = glob.glob('{}/*.mov'.format(args.processdir))
+    all_video_files += glob.glob('{}/*.MOV'.format(args.processdir))
     all_video_files = [os.path.basename(f) for f in all_video_files]
     
     # Extract audio from all video files

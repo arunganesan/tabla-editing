@@ -1,0 +1,25 @@
+{
+  "theme": "Dha-TR KTTK TRKT Dha-TR KTTK TRKT Dha-Dha- TRKT",
+  "khali": "Ta-TR KTTK TRKT Ta-TR KTTK TRKT Dha-Dha- TRKT",
+  "variations": [
+      [
+        ["theme", 1,2,3,4,1,2,3,4],
+        ["theme", 1,2,3,4,5,6,7,8],
+        ["khali", 1,2,3,4,1,2,3,4],
+        ["theme", 1,2,3,4,5,6,7,8]
+      ],
+       [
+        ["theme", 1,2,3,1,2,3,1,2],
+        ["theme", 1,2,3,4,5,6,7,8],
+        ["khali", 1,2,3,1,2,3,1,2],
+        ["theme", 1,2,3,4,5,6,7,8]
+      ],
+       [
+        ["theme", 1,2,1,2,1,2,3,4],
+        ["theme", 1,2,3,4,5,6,7,8],
+        ["khali", 1,2,1,2,1,2,3,4],
+        ["theme", 1,2,3,4,5,6,7,8]
+      ]
+
+    ]
+}

@@ -1,0 +1,38 @@
+{
+  "theme": "Dha-TR KTTK DRDR KTTK Dha-TR KTTK TuNa KTTK",
+  "khali": "Ta-TR KTTK TRTR KTTK Ta-TR KTTK DhinNa GRNG",
+  "variations": [
+      [
+        ["theme", 1,2,3,4,1,2,3,4],
+        ["theme", 1,2,3,4,5,6,7,8],
+        ["khali", 1,2,3,4,1,2,3,4],
+        ["theme", 1,2,3,4,5,6,7,8]
+      ], [
+        ["theme", 1,2,3,1,2,3,1,2],
+        ["theme", 1,2,3,4,5,6,7,8],
+        ["khali", 1,2,3,1,2,3,1,2],
+        ["theme", 1,2,3,4,5,6,7,8]
+      ], [
+        ["theme", 3,4,3,4,3,4,1,2],
+        ["theme", 1,2,3,4,5,6,7,8],
+        ["khali", 3,4,3,4,3,4,1,2],
+        ["theme", 1,2,3,4,5,6,7,8]
+      ], [
+        ["raw", "Dha-TR", "KTRK", "TRKT", "TKTR", "KTTK", "TRKT", "Tak-Ka-", "Te-Re"],
+        ["theme", 1,2,3,4,5,6,7,8],
+        ["raw", "Ta-TR", "KTRK", "TRKT", "TKTR", "KTTK", "TRKT", "Tak-Ka-", "Te-Re"],
+        ["theme", 1,2,3,4,5,6,7,8]
+      ], [
+        ["theme", 1,2,1,2,1,2,3,4],
+        ["theme", 1,2,3,4,5,6,7,8],
+        ["khali", 1,2,1,2,1,2,3,4],
+        ["theme", 1,2,3,4,5,6,7,8]
+      ], [
+        ["theme", 5,6,5,6,1,2,5,6],
+        ["theme", 1,2,3,4,5,6,7,8],
+        ["khali", 5,6,5,6,1,2,5,6],
+        ["theme", 1,2,3,4,5,6,7,8]
+      ]
+
+    ]
+}
