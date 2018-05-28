@@ -1,13 +1,20 @@
 #! /usr/bin/env python
+import json
+
+
+ARRANGE_FILENAME = 'arrangement.json'
+CAPTION_FILENAME = 'caption.json'
+THEMES = json.load(open('library/themes.json'))
+VARIATIONS = json.load(open('library/variations.json'))
+
 
 def join_with_newline(bars):
     chunks = []
     PERLINE = 4
     for idx in range(0, len(bars), PERLINE):
         chunks.append(bars[idx:idx+PERLINE])
-    line = '\n'.join([', '.join(bars) for bars in chunks])
+    line = '\n'.join([', '.join(b) for b in chunks])
     return line
-
 
 
 def play_all_this(timer, THEME, SECOND_PER_BAR):
@@ -23,35 +30,35 @@ def sample(theme, indices):
     return [theme[i-1] for i in indices]
 
 
-IFILE = 'arrangement.json'
-OFILE = 'caption.json'
-
 def main():
     import argparse
-    import json, os
-    
-    #parser = argparse.ArgumentParser()
-    #parser.add_argument('processdir')
-    #args = parser.parse_args()
-    
-    
+    import os
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('processdir')
+    args = parser.parse_args()
+
+    IDIR = args.processdir
+    arrange_ifile = '{}/{}'.format(IDIR, ARRANGE_FILENAME)
+    assert os.path.exists(arrange_ifile), 'Arrangement file not found'
+
+    arrangement = json.load(open(arrange_ifile))
 
     caption_json = {}
-    arrangement = json.load(open(IFILE))
-    
     caption_json['start'] = arrangement['start']
     caption_json['duration'] = 60
     caption_json['audioDelay'] = 0
 
-    library_ifile = arrangement['library']
-    library_ifile = 'library/' + library_ifile
-    assert os.path.exists(library_ifile)
-    library = json.load(open(library_ifile))
-    THEME = library['theme'].split()
-    KHALI = library['khali'].split()
-    
-    variations = []
-    for variation in library['variations']:
+    composition_name = arrangement['composition']
+    assert composition_name in THEMES, 'Unknown composition'
+
+    composition = THEMES[composition_name]
+    THEME = composition['theme'].split()
+    KHALI = composition['khali'].split()
+
+    # Expand all variations for this theme
+    variations = {}
+    for variation_name, variation in VARIATIONS.iteritems():
         expanded_variation = []
         for row in variation:
             sample_from = row[0]
@@ -63,10 +70,8 @@ def main():
                 elif sample_from == 'khali':
                     source = KHALI
                 expanded_variation += sample(source, row[1:])
-            #variations.append(sample(source, row[1:]))
-        
-        variations.append(expanded_variation)
-    
+        variations[variation_name] = expanded_variation
+
     text = []
     BPM = arrangement['bpm']
     SECOND_PER_BAR = 60.0 / BPM
@@ -74,14 +79,12 @@ def main():
     for piece in arrangement['arrangement']:
         if piece['time'] != -1:
             timer = piece['time']
-        
 
         if piece['part'] == 'variation':
-            notes = variations[piece['idx']-1]
+            notes = variations[piece['idx']]
             part1 = notes[:len(notes)/2]
             part2 = notes[len(notes)/2:]
-            
-            print part1, part2
+
             lines, timer = play_all_this(timer, part1, SECOND_PER_BAR)
             text += lines
 
@@ -92,12 +95,15 @@ def main():
                 notes = THEME
             elif piece['part'] == 'khali':
                 notes = KHALI
-        
+
             lines, timer = play_all_this(timer, notes, SECOND_PER_BAR)
             text += lines
     caption_json['text'] = text
 
-    ofile = open(OFILE, 'w')
+    ofilename = '{}/{}'.format(IDIR, CAPTION_FILENAME)
+    ofile = open(ofilename, 'w')
     json.dump(caption_json, ofile, indent=4)
     ofile.close()
+
+
 main()
