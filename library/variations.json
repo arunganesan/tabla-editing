@@ -1,61 +1,120 @@
 {
   "1": [
-    ["theme", 1,2,3,4,1,2,3,4],
-    ["theme", 1,2,3,4,5,6,7,8],
-    ["khali", 1,2,3,4,1,2,3,4],
-    ["theme", 1,2,3,4,5,6,7,8]
+    { "sample": "theme", "group": "a", "notes": [1,2,3,4] },
+    { "sample": "theme", "group": "b", "notes": [1,2,3,4] },
+    { "sample": "theme", "group": "d", "notes": [1,2,3,4,5,6,7,8] },
+    { "sample": "khali", "group": "a", "notes": [1,2,3,4] },
+    { "sample": "khali", "group": "b", "notes": [1,2,3,4] },
+    { "sample": "theme", "group": "d", "notes": [1,2,3,4,5,6,7,8] }
   ],
   "2": [
-    ["theme", 1,2,3,1,2,3,1,2],
-    ["theme", 1,2,3,4,5,6,7,8],
-    ["khali", 1,2,3,1,2,3,1,2],
-    ["theme", 1,2,3,4,5,6,7,8]
+    { "sample": "theme", "group": "a", "notes": [1,2,3] },
+    { "sample": "theme", "group": "b", "notes": [1,2,3] },
+    { "sample": "theme", "group": "c", "notes": [1,2] },
+    { "sample": "theme", "group": "d", "notes": [1,2,3,4,5,6,7,8] },
+    { "sample": "khali", "group": "a", "notes": [1,2,3] },
+    { "sample": "khali", "group": "b", "notes": [1,2,3] },
+    { "sample": "khali", "group": "c", "notes": [1,2] },
+    { "sample": "theme", "group": "d", "notes": [1,2,3,4,5,6,7,8] }
   ],
   "3": [
-    ["theme", 1,2,3,1,2,3,1,2,3,1,2,3,5,6,7,8],
-    ["khali", 1,2,3,1,2,3,1,2,3],
-    ["theme", 1,2,3,5,6,7,8]
+    { "sample": "theme", "group": "a", "notes": [1,2,3] },
+    { "sample": "theme", "group": "b", "notes": [1,2,3] },
+    { "sample": "theme", "group": "c", "notes": [1,2,3] },
+    { "sample": "theme", "group": "d", "notes": [1,2,3] },
+    { "sample": "theme", "group": "e", "notes": [5,6,7,8] },
+    { "sample": "khali", "group": "a", "notes": [1,2,3] },
+    { "sample": "khali", "group": "b", "notes": [1,2,3] },
+    { "sample": "khali", "group": "c", "notes": [1,2,3] },
+    { "sample": "theme", "group": "d", "notes": [1,2,3] },
+    { "sample": "theme", "group": "e", "notes": [5,6,7,8] }
   ],
   "4": [
-    ["theme", 1,2,1,2,1,2,3,4],
-    ["theme", 1,2,3,4,5,6,7,8],
-    ["khali", 1,2,1,2,1,2,3,4],
-    ["theme", 1,2,3,4,5,6,7,8]
+    { "sample": "theme", "group": "a", "notes": [1,2] },
+    { "sample": "theme", "group": "b", "notes": [1,2] },
+    { "sample": "theme", "group": "c", "notes": [1,2,3,4] },
+    { "sample": "theme", "group": "e", "notes": [1,2,3,4,5,6,7,8] },
+    { "sample": "khali", "group": "a", "notes": [1,2] },
+    { "sample": "khali", "group": "b", "notes": [1,2] },
+    { "sample": "khali", "group": "c", "notes": [1,2,3,4] },
+    { "sample": "theme", "group": "e", "notes": [1,2,3,4,5,6,7,8] }
   ],
   "5": [
-    ["theme", 1,2,1,2,1,2,1,2],
-    ["theme", 1,2,3,4,5,6,7,8],
-    ["khali", 1,2,1,2,1,2,1,2],
-    ["theme", 1,2,3,4,5,6,7,8]
+    { "sample": "theme", "group": "a", "notes": [1,2] },
+    { "sample": "theme", "group": "b", "notes": [1,2] },
+    { "sample": "theme", "group": "c", "notes": [1,2] },
+    { "sample": "theme", "group": "d", "notes": [1,2] },
+    { "sample": "theme", "group": "e", "notes": [1,2,3,4,5,6,7,8] },
+    { "sample": "khali", "group": "a", "notes": [1,2] },
+    { "sample": "khali", "group": "b", "notes": [1,2] },
+    { "sample": "khali", "group": "c", "notes": [1,2] },
+    { "sample": "khali", "group": "d", "notes": [1,2] },
+    { "sample": "theme", "group": "e", "notes": [1,2,3,4,5,6,7,8] }
   ],
   "6": [
-    ["theme", 1,1,1,2,1,2,1,2],
-    ["theme", 1,2,3,4,5,6,7,8],
-    ["khali", 1,1,1,2,1,2,1,2],
-    ["theme", 1,2,3,4,5,6,7,8]
+    { "sample": "theme", "group": "a", "notes": [1] },
+    { "sample": "theme", "group": "b", "notes": [1] },
+    { "sample": "theme", "group": "c", "notes": [1] },
+    { "sample": "theme", "group": "d", "notes": [2] },
+    { "sample": "theme", "group": "e", "notes": [1,2] },
+    { "sample": "theme", "group": "f", "notes": [1,2] },
+    { "sample": "theme", "group": "g", "notes": [1,2,3,4,5,6,7,8] },
+    { "sample": "khali", "group": "a", "notes": [1] },
+    { "sample": "khali", "group": "b", "notes": [1] },
+    { "sample": "khali", "group": "c", "notes": [1] },
+    { "sample": "khali", "group": "d", "notes": [2] },
+    { "sample": "khali", "group": "e", "notes": [1,2] },
+    { "sample": "khali", "group": "f", "notes": [1,2] },
+    { "sample": "theme", "group": "g", "notes": [1,2,3,4,5,6,7,8] }
   ],
   "7": [
-    ["theme", 1,1,1,2,1,1,1,2],
-    ["theme", 1,2,3,4,5,6,7,8],
-    ["khali", 1,1,1,2,1,1,1,2],
-    ["theme", 1,2,3,4,5,6,7,8]
+    { "sample": "theme", "group": "a", "notes": [1] },
+    { "sample": "theme", "group": "b", "notes": [1] },
+    { "sample": "theme", "group": "c", "notes": [1] },
+    { "sample": "theme", "group": "d", "notes": [2] },
+    { "sample": "theme", "group": "a", "notes": [1] },
+    { "sample": "theme", "group": "b", "notes": [1] },
+    { "sample": "theme", "group": "c", "notes": [1] },
+    { "sample": "theme", "group": "d", "notes": [2] },
+    { "sample": "theme", "group": "g", "notes": [1,2,3,4,5,6,7,8] },
+    { "sample": "khali", "group": "a", "notes": [1] },
+    { "sample": "khali", "group": "b", "notes": [1] },
+    { "sample": "khali", "group": "c", "notes": [1] },
+    { "sample": "khali", "group": "d", "notes": [2] },
+    { "sample": "khali", "group": "a", "notes": [1] },
+    { "sample": "khali", "group": "b", "notes": [1] },
+    { "sample": "khali", "group": "c", "notes": [1] },
+    { "sample": "khali", "group": "d", "notes": [2] },
+    { "sample": "theme", "group": "g", "notes": [1,2,3,4,5,6,7,8] }
   ],
   "8": [
-    ["theme", 5,6,5,6,1,2,5,6],
-    ["theme", 1,2,3,4,5,6,7,8],
-    ["khali", 5,6,5,6,1,2,5,6],
-    ["theme", 1,2,3,4,5,6,7,8]
+    { "sample": "theme", "group": "a", "notes": [5,6] },
+    { "sample": "theme", "group": "b", "notes": [5,6] },
+    { "sample": "theme", "group": "c", "notes": [1,2] },
+    { "sample": "theme", "group": "d", "notes": [5,6] },
+    { "sample": "theme", "group": "g", "notes": [1,2,3,4,5,6,7,8] },
+    { "sample": "khali", "group": "a", "notes": [5,6] },
+    { "sample": "khali", "group": "b", "notes": [5,6] },
+    { "sample": "khali", "group": "c", "notes": [1,2] },
+    { "sample": "khali", "group": "d", "notes": [5,6] },
+    { "sample": "theme", "group": "g", "notes": [1,2,3,4,5,6,7,8] }
   ],
   "9": [
-    ["theme", 3,4,3,4,3,4,1,2],
-    ["theme", 1,2,3,4,5,6,7,8],
-    ["khali", 3,4,3,4,3,4,1,2],
-    ["theme", 1,2,3,4,5,6,7,8]
+    { "sample": "theme", "group": "a", "notes": [3,4] },
+    { "sample": "theme", "group": "b", "notes": [3,4] },
+    { "sample": "theme", "group": "c", "notes": [3,4] },
+    { "sample": "theme", "group": "d", "notes": [1,2] },
+    { "sample": "theme", "group": "g", "notes": [1,2,3,4,5,6,7,8] },
+    { "sample": "khali", "group": "a", "notes": [3,4] },
+    { "sample": "khali", "group": "b", "notes": [3,4] },
+    { "sample": "khali", "group": "c", "notes": [3,4] },
+    { "sample": "khali", "group": "d", "notes": [1,2] },
+    { "sample": "theme", "group": "g", "notes": [1,2,3,4,5,6,7,8] }
   ],
   "10": [
-    ["raw", "Dha-TR", "KTRK", "TRKT", "TKTR", "KTTK", "TRKT", "Tak-Ka-", "Te-Re"],
-    ["theme", 1,2,3,4,5,6,7,8],
-    ["raw", "Ta-TR", "KTRK", "TRKT", "TKTR", "KTTK", "TRKT", "Tak-Ka-", "Te-Re"],
-    ["theme", 1,2,3,4,5,6,7,8]
+    { "sample": "raw", "group": "a", "notes": ["Dha-TR", "KTRK", "TRKT", "TKTR", "KTTK", "TRKT", "Tak-Ka-", "Te-Re"] },
+    { "sample": "theme", "group": "b", "notes": [1,2,3,4,5,6,7,8] },
+    { "sample": "raw", "group": "a", "notes": ["Ta-TR", "KTRK", "TRKT", "TKTR", "KTTK", "TRKT", "Tak-Ka-", "Te-Re"] },
+    { "sample": "theme", "group": "b", "notes": [1,2,3,4,5,6,7,8] }
   ]
 }
